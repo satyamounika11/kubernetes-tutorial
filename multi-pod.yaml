@@ -1,3 +1,5 @@
+#This file is used for creating multiple containers in a Pod.
+
 apiVersion: v1
 kind: Pod
 metadata:
