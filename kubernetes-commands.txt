@@ -67,6 +67,16 @@ kubectl logs deployment-name
 To know the CNI (Container Network Interface) used - Login to minikube and type the below command:
 cat /etc/cni/net.d/*
 
+To create a service:
+kubectl create -f anyservice.yaml
+
+To check the services:
+kubectl get svc
+
+To check the nodeport-service through minikube: 
+1.(if you are using a Docker Desktop): minikube service service-name
+2.(if you are using a Virtual Box): http://minikube-ip:30080 (30080 is the NodePort, it can range from 30000-32335)
+
 
 
 
