@@ -1,0 +1,23 @@
+To start a minikube cluster:
+minikube start
+
+To know the status of minikube:
+minikube status
+
+To know the cluster information:
+kubectl cluster-info
+
+To create namespace:
+kubectl create namespace name
+
+To create pods:
+kubectl create -f pod.yaml
+
+To check list of pods:
+kubectl get pods
+
+To get wide information of a pod:
+kubectl get pods -o wide
+
+To know the indepth information of a pod or for troubleshooting purpose:
+kubectl describe pod pod-name
