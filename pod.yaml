@@ -1,4 +1,5 @@
-# This file is used for creating a single container
+# Pod is used for running single or multiple containers.
+# This file is an example of a Pod that runs a single container.
 
 apiVersion: v1
 kind: Pod

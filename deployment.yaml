@@ -1,4 +1,5 @@
-# This file is used creating Deployment - to manage pods.
+# This file is used for creating Deployment, that manages the pods.
+# This file creates Deployment --> ReplicaSet --> Pods
 
 apiVersion: apps/v1
 kind: Deployment
