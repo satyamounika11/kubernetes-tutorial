@@ -1,2 +1,0 @@
-Login : minikube ssh
-To check the CNI Plugin for minikube : cat /etc/cni/net.d/*
