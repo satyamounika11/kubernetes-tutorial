@@ -87,42 +87,19 @@ kubectl get pods -l app=nginx -o name | while read pod; do
   kubectl logs "$pod" | head -n 7
 done
 
-To create eks:
-eksctl create cluster \
-  --name demo-cluster \
-  --region ap-south-1 \
-  --nodegroup-name demo-nodegroup \
-  --node-type t3.medium \
-  --nodes 2 \
-  --nodes-min 1 \
-  --nodes-max 2 \
-  --managed
+To create Ingress controller:
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
 
-configure kubectl to the cluster:
-aws eks --region ap-south-1 update-kubeconfig --name demo-cluster
+To create Ingress resource:
+kubectl create -f host-based-ingress.yaml
 
-kubectl apply -f deployment.yaml
-kubectl apply -f loadbalancer-service.yaml
+To view ingress
+kubectl get ingress
+(or)
+kubectl get ing
 
-kubectl get pods -o wide
-
-kubectl get svc
-
-curl http://<external-ip> or open it in browser
-
-view logs with labelling:
-kubectl get pods -l app=nginx -o name | while read pod; do
-  echo "=== Logs from $pod ==="
-  kubectl logs "$pod" | head -n 7
-done
-
-Delete everything:
-kubectl delete deploy deployment.yaml
-kubectl delete svc loadbalancer.yaml
-eksctl delete cluster --name demo-cluster --region ap-south-1
-
-
-
+For host based : edit vim /etc/hosts (not needed at production level) --> add this line :<EXTERNAL-IP-Ingress-Controller> nginx.local. Now we can acess the url at : http://nginx.local
+For path based: editing of /etc/hosts --> not needed.
 
 
 
