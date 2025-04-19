@@ -101,5 +101,6 @@ kubectl get ing
 For host based : edit vim /etc/hosts (not needed at production level) --> add this line :<EXTERNAL-IP-Ingress-Controller> nginx.local. Now we can acess the url at : http://nginx.local
 For path based: editing of /etc/hosts --> not needed.
 
-
+To switch from AWS to Minikube:
+kubectl config use-context minikube
 
