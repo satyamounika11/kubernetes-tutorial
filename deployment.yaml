@@ -20,7 +20,7 @@ spec:
         image: nginx:1.14.2
         ports:
         - containerPort: 80
-  replicas: 5
+  replicas: 2
   selector:
     matchLabels:
       app: nginx

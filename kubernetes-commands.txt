@@ -73,9 +73,53 @@ kubectl create -f anyservice.yaml
 To check the services:
 kubectl get svc
 
+To check for Cluster-IP:
+minikube ssh
+curl http://internal-ip:80 (gives the content of the nginx html page)
+
 To check the nodeport-service through minikube: 
 1.(if you are using a Docker Desktop): minikube service service-name
 2.(if you are using a Virtual Box): http://minikube-ip:30080 (30080 is the NodePort, it can range from 30000-32335)
+
+To check which pod is getting the traffic:
+kubectl get pods -l app=nginx -o name | while read pod; do
+  echo "=== Logs from $pod ==="
+  kubectl logs "$pod" | head -n 7
+done
+
+To create eks:
+eksctl create cluster \
+  --name demo-cluster \
+  --region ap-south-1 \
+  --nodegroup-name demo-nodegroup \
+  --node-type t3.medium \
+  --nodes 2 \
+  --nodes-min 1 \
+  --nodes-max 2 \
+  --managed
+
+configure kubectl to the cluster:
+aws eks --region ap-south-1 update-kubeconfig --name demo-cluster
+
+kubectl apply -f deployment.yaml
+kubectl apply -f loadbalancer-service.yaml
+
+kubectl get pods -o wide
+
+kubectl get svc
+
+curl http://<external-ip> or open it in browser
+
+view logs with labelling:
+kubectl get pods -l app=nginx -o name | while read pod; do
+  echo "=== Logs from $pod ==="
+  kubectl logs "$pod" | head -n 7
+done
+
+Delete everything:
+kubectl delete deploy deployment.yaml
+kubectl delete svc loadbalancer.yaml
+eksctl delete cluster --name demo-cluster --region ap-south-1
 
 
 
