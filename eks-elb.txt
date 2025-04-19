@@ -92,3 +92,21 @@ Delete everything:
 kubectl delete deploy deployment.yaml
 kubectl delete svc loadbalancer.yaml
 eksctl delete cluster --name demo-cluster --region ap-south-1
+
+Install helm
+
+Create Ingress controller:
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/aws/deploy.yaml
+This command deploys all the necessary resources, including the Deployment, Service, and LoadBalancer.
+
+kubectl get pods -n ingress-nginx
+kubectl get svc -n ingress-nginx
+
+Steps to Implement Ingress:
+create Ingress Resource
+
+Test:
+http://<LoadBalancer-DNS>/app1
+http://<LoadBalancer-DNS>/app2
+
+
