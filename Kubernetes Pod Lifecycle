@@ -1,0 +1,56 @@
+Kubernetes Pod Lifecycle – Step by Step
+
+1. Pending
+- The Pod is accepted by the Kubernetes system.
+- But **not yet scheduled** to any Node OR waiting for resources like volumes to attach.
+
+---
+
+2. Scheduled
+- The Pod is assigned to a Node.
+- Still not running yet—just chosen where it will run.
+
+---
+
+3. Container Creating
+- Kubernetes is pulling the container image, creating volumes, setting up the environment.
+- You may see `ContainerCreating` if you run `kubectl get pods`.
+
+---
+
+4. Running
+- All containers in the Pod are successfully started.
+- The Pod is now actively serving traffic or doing its job.
+
+---
+
+5. Succeeded (only for one-time jobs)
+- All containers in the Pod exit successfully (code 0).
+- This usually happens with Job or CronJob Pods.
+
+---
+
+6. Failed
+- One or more containers in the Pod exit with an error (non-zero exit code).
+- The Pod won’t be restarted (unless managed by a controller like a Deployment).
+
+---
+
+7. CrashLoopBackOff / Error
+- If a container keeps crashing and restarting, Kubernetes goes into CrashLoopBackOff.
+- This indicates a repeated failure with back-off wait time.
+
+
+
+8. Terminating
+- When you delete a Pod, Kubernetes gracefully stops containers, runs shutdown hooks, and then removes it.
+
+---
+
+Visual Summary (Optional to Draw on Whiteboard)
+
+Pending → Scheduled → ContainerCreating → Running
+                              ↓
+                       Succeeded / Failed / CrashLoopBackOff
+                              ↓
+                         Terminating (on delete)
