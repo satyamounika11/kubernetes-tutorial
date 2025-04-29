@@ -27,6 +27,8 @@ Kubernetes Pod Lifecycle – Step by Step
 5. Succeeded (only for one-time jobs)
 - All containers in the Pod exit successfully (code 0).
 - This usually happens with Job or CronJob Pods.
+Eg: You want to run a one-time task like: A data backup/ Sending a report email / Running a batch script
+These tasks: Start --> Do their work --> Exit
 
 ---
 
