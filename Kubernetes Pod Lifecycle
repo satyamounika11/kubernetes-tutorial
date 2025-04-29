@@ -2,7 +2,7 @@ Kubernetes Pod Lifecycle – Step by Step
 
 1. Pending
 - The Pod is accepted by the Kubernetes system.
-- But **not yet scheduled** to any Node OR waiting for resources like volumes to attach.
+- But not yet scheduled to any Node OR waiting for resources like volumes to attach.
 
 ---
 
