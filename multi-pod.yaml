@@ -1,0 +1,16 @@
+#This file is used for creating multiple containers in a Pod.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: two-container-pod
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+      ports:
+        - containerPort: 80
+    - name: redis-container
+      image: redis
+      ports:
+        - containerPort: 6379

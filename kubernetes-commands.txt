@@ -1,0 +1,145 @@
+To start a minikube cluster:
+minikube start
+
+To know the status of minikube:
+minikube status
+
+To get a dashboard view of the resources:
+minikube dashboard
+
+To login to minikube:
+minikube ssh
+
+To know the cluster information:
+kubectl cluster-info
+
+To get the list of nodes:
+kubectl get nodes
+
+To create namespace:
+kubectl create namespace name
+
+To create pods:
+kubectl create -f pod.yaml
+
+To create a pod in a specific namespace:
+kubectl create -f pod.yaml -n namespace-name
+
+To check list of pods:
+kubectl get pods
+
+To check the list of pods in a specific namespace:
+kubectl get pods -n namespace-name
+
+To get wide information of a pod:
+kubectl get pods -o wide
+
+To know the indepth information of a pod or for troubleshooting purpose:
+kubectl describe pod pod-name
+
+To check the logs of the pod:
+kubectl logs pod-name
+
+To create a depolyment:
+kubectl create -f deployment.yaml
+
+To create a deployment in a specific namespace:
+kubectl create -f deployment -n namespace-name
+
+To get the list of deployments:
+kubectl get deployments
+kubectl get deployments -n namespace-name
+(or)
+kubectl get deploy
+
+To get the list of Replicasets:
+kubectl get replicaset
+kubectl get replicaset -n namespace-name
+(or)
+kubectl get rs
+
+To know the indepth information of a deployment or for troubleshooting purpose:
+kubectl describe deployment deploy-name
+
+To get logs of the deployment:
+kubectl logs deployment-name
+
+To know the CNI (Container Network Interface) used - Login to minikube and type the below command:
+cat /etc/cni/net.d/*
+
+To create a service:
+kubectl create -f anyservice.yaml
+
+To check the services:
+kubectl get svc
+
+To check for Cluster-IP:
+minikube ssh
+curl http://internal-ip:80 (gives the content of the nginx html page)
+
+To check the nodeport-service through minikube: 
+1.(if you are using a Docker Desktop): minikube service service-name
+2.(if you are using a Virtual Box): http://minikube-ip:30080 (30080 is the NodePort, it can range from 30000-32335)
+
+To check which pod is getting the traffic:
+kubectl get pods -l app=nginx -o name | while read pod; do
+  echo "=== Logs from $pod ==="
+  kubectl logs "$pod" | head -n 7
+done
+
+To create Ingress controller:
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+
+To create Ingress resource:
+kubectl create -f host-based-ingress.yaml
+
+To view ingress
+kubectl get ingress
+(or)
+kubectl get ing
+
+For host based : edit vim /etc/hosts (not needed at production level) --> add this line :<EXTERNAL-IP-Ingress-Controller> nginx.local. Now we can acess the url at : http://nginx.local
+For path based: editing of /etc/hosts --> not needed.
+
+To switch from AWS to Minikube:
+kubectl config use-context minikube
+
+To create Self-Signed TLS Certificate (Only for Local Dev)
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+-out tls.crt -keyout tls.key \
+-subj "/CN=nginx.local/O=nginx.local"
+
+In EKS:
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout tls.key \
+  -out tls.crt \
+  -subj "//CN=a89fbf8eafe914981b651b710ab2dd71-06dfbf7c3508b164.elb.ap-south-1.amazonaws.com/O=TLS"
+
+Change the laodbalancer in subject.
+
+This will generate tls.crt and tls.key files.
+
+
+Create a TLS Secret in k8s:
+kubectl create secret tls nginx-tls-secret \
+  --cert=tls.crt --key=tls.key
+
+
+Create secret consisting of Username and Password:
+
+kubectl create secret generic nginx-secret-file \
+  --from-literal=username=nguser \
+  --from-literal=password=password \
+  --dry-run=client -o yaml > nginx-secret-file.yaml
+
+  (or)
+
+You can use below commands to manually encode with base64:
+echo -n 'nguser' | base64
+# Output: bmd4dXNhcg==
+
+echo -n 'password' | base64
+# Output: cGFzc3dvcmQ=
+
+Paste the results in Yaml file.
+

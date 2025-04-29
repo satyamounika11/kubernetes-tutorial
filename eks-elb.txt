@@ -1,0 +1,112 @@
+Pre-requisites to have: aws-cli, docker, kubectl, eksctl, git
+-------------------------------------------------------------
+
+docker installation:
+--------------------
+sudo apt install docker.io -y
+
+sudo apt update 
+
+kubectl installation:
+---------------------
+steps can be seen in website : https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+chmod +x kubectl
+mkdir -p ~/.local/bin
+mv ./kubectl ~/.local/bin/kubectl
+kubectl version --client
+
+
+git:
+----
+sudo apt install git
+
+
+aws installation:
+------------------
+cd ~
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo apt install unzip
+unzip awscliv2.zip
+sudo ./aws/install
+ls
+cd aws
+sudo ./install
+aws --version
+
+cd ..
+
+eksctl:
+-------
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.110.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+
+aws configure: (Give Access Key, Secret Access Key, Region etc)
+
+==================================================================
+
+Clone git repo:
+git clone https://github.com/satyamounika11/kubernetes-tutorial
+
+
+To create eks:
+---------------
+eksctl create cluster \
+  --name demo-cluster \
+  --region ap-south-1 \
+  --nodegroup-name demo-nodegroup \
+  --node-type t3.medium \
+  --nodes 2 \
+  --nodes-min 1 \
+  --nodes-max 2 \
+  --managed
+
+configure kubectl to the cluster:
+---------------------------------
+aws eks --region ap-south-1 update-kubeconfig --name demo-cluster
+
+cd kubernetes-tutorial
+
+Deploy resources:
+-----------------
+kubectl create -f deployment.yaml
+kubectl create -f loadbalancer-service.yaml
+
+kubectl get pods -o wide
+
+kubectl get svc
+
+curl http://<external-ip> or open it in browser
+
+view logs with labelling:
+kubectl get pods -l app=nginx -o name | while read pod; do
+  echo "=== Logs from $pod ==="
+  kubectl logs "$pod" | head -n 7
+done
+
+Delete everything:
+kubectl delete deploy deployment.yaml
+kubectl delete svc loadbalancer.yaml
+eksctl delete cluster --name demo-cluster --region ap-south-1
+
+Install helm
+
+Create Ingress controller:
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/aws/deploy.yaml
+This command deploys all the necessary resources, including the Deployment, Service, and LoadBalancer.
+
+kubectl get pods -n ingress-nginx
+kubectl get svc -n ingress-nginx
+
+Steps to Implement Ingress:
+create Ingress Resource
+
+Test:
+http://<LoadBalancer-DNS>/app1
+http://<LoadBalancer-DNS>/app2
+
+
