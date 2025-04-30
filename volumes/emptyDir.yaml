@@ -1,0 +1,23 @@
+#Example of Two containers (app: writes data, sidecar: reads the data) using an empty Directory named myvolume
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: emptydir-example
+spec:
+  containers:
+  - name: app
+    image: busybox
+    command: ["/bin/sh", "-c", "echo Hello > /data/message; sleep 3600"]
+    volumeMounts:
+    - name: myvolume
+      mountPath: /data
+  - name: sidecar
+    image: busybox
+    command: ["/bin/sh", "-c", "cat /data/message; sleep 3600"]
+    volumeMounts:
+    - name: myvolume
+      mountPath: /data
+  volumes:
+  - name: myvolume
+    emptyDir: {}

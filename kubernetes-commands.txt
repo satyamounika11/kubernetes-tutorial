@@ -143,3 +143,44 @@ echo -n 'password' | base64
 
 Paste the results in Yaml file.
 
+-------
+
+To implement Storage Class, PV, PVC in minikube, enable addons:
+minikube addons enable csi-hostpath-driver
+minikube addons enable volumesnapshots
+
+
+Types of StorageClassName: 
+
+Minikube
+- `standard` – hostPath-based storage for local development
+
+AWS (EKS)
+- `gp2` – General Purpose SSD (older default)
+- `gp3` – General Purpose SSD (new default, more efficient)
+- `io1` – Provisioned IOPS SSD for high-performance apps
+- `io2` – More durable version of `io1`
+- `st1` – Throughput-optimized HDD for big data
+- `sc1` – Cold HDD for infrequently accessed data
+
+GCP (GKE)
+- `standard` – Standard Persistent Disk (HDD)
+- `premium-rwo` – SSD Persistent Disk for single-node access
+- `premium-rwx` – SSD Persistent Disk for multi-node access
+- `balanced` – Balanced PD with good cost-performance
+
+Azure (AKS)
+- `managed-premium` – Premium SSD managed by Azure
+- `managed-standard` – Standard HDD managed by Azure
+- `azurefile` – Azure File share for SMB/NFS access
+
+OpenShift
+- `ocs-storagecluster-ceph-rbd` – Ceph block storage
+- `ocs-storagecluster-cephfs` – Ceph shared file storage
+
+CSI/Other
+- `longhorn` – Lightweight distributed block storage
+- `local-storage` – Manual setup for local SSDs or disks
+- `nfs-client` – Dynamic provisioning using NFS
+- `rook-ceph-block` – Ceph block storage via Rook
+- `cephfs` – Ceph shared file storage via CSI
